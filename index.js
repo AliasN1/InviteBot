@@ -12,12 +12,12 @@ const mongodb_srv = process.env['mongodb_serv']
 
 const Discord = require('discord.js');
 const fs = require('fs');
-const bot = new Discord.Client({ disableEveryone: true });
-bot.commands = new Discord.Collection();
-bot.events = new Discord.Collection();
+const client = new Discord.Client({ disableEveryone: true });
+client.commands = new Discord.Collection();
+client.events = new Discord.Collection();
 
 /*['command_handler', 'event_handler'].forEach(handler => {
-  require(`./handlers/${handler}`)(bot, Discord)
+  require(`./handlers/${handler}`)(client, Discord)
 })*/
 
 fs.readdir('./commands/', (err, files) => {
@@ -32,21 +32,21 @@ fs.readdir('./commands/', (err, files) => {
   jsfile.forEach((f, i) => {
     let props = require(`./commands/${f}`);
     console.log(`${f} loaded!`);
-    bot.commands.set(props.help.name, props);
+    client.commands.set(props.help.name, props);
   });
 });
 
 //Playing Message
-bot.on('ready', async () => {
+client.on('ready', async () => {
   console.log(
-    `${bot.user.username} is online on ${bot.guilds.cache.size} servers!`
+    `${client.user.username} is online on ${client.guilds.cache.size} servers!`
   );
 
-  bot.user.setActivity('Sorting Scams', { type: 'PLAYING' });
+  client.user.setActivity('Sorting Scams', { type: 'PLAYING' });
 });
 
 //Command Manager
-bot.on('message', async message => {
+client.on('message', async message => {
   if (message.author.bot) return;
   if (message.channel.type === 'dm') return;
 
@@ -67,8 +67,8 @@ bot.on('message', async message => {
   //Check for prefix
   if (!cmd.startsWith(prefix)) return;
 
-  let commandfile = bot.commands.get(cmd.slice(prefix.length));
-  if (commandfile) commandfile.run(bot, message, args);
+  let commandfile = client.commands.get(cmd.slice(prefix.length));
+  if (commandfile) commandfile.run(client, message, args);
 });
 
 //Token need in token.json
@@ -81,4 +81,4 @@ mongoose.connect(mongodb_srv, {
 }).catch((err) => {
   console.log(err);
 })
-bot.login(token);
+client.login(token);
