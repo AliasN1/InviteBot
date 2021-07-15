@@ -20,16 +20,8 @@ client.events = new Discord.Collection();
 ['command_handler', 'event_handler'].forEach(handler => {
   require(`./handlers/${handler}`)(client, Discord);
 })
-//Playing Message
-client.on('ready', async () => {
-  console.log(
-    `${client.user.username} is online on ${client.guilds.cache.size} servers!`
-  );
 
-  client.user.setActivity('Sorting Scams', { type: 'PLAYING' });
-});
-
-//Token need in token.json
+//Login and connect to db
 mongoose.connect(mongodb_srv, {
   useNewUrlParser: true,
   useUnifedTopology: true,
