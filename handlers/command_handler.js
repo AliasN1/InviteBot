@@ -9,7 +9,7 @@ module.exports = (client, Discord) => {
     if (command.name) {
       client.commands.set(command.name, command);
     } else {
-        continue;
+      continue;
     }
   }
 }
